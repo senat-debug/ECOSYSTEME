@@ -1,4 +1,5 @@
-#include "Core/GameEngine.h" 
+#include "Core/GameEngine.h"
+#include <chrono> 
 #include <iostream> 
 #include <cstdlib> 
 #include <ctime> 
@@ -25,7 +26,11 @@ int main(int argc, char* argv[]) {
     std::cout << "R: Reset simulation" << std::endl; 
     std::cout << "F: Ajouter nourriture" << std::endl; 
     std::cout << "FLÈCHES: Vitesse simulation" << std::endl; 
-    std::cout << "ÉCHAP: Quitter" << std::endl; 
+    std::cout << "ÉCHAP: Quitter" << std::endl;
+    
+    Ecosystem::Core::GameEngine::HandleInput;
+    Ecosystem::Core::Ecosystem::SpawnFood;
+    Ecosystem::Core::Ecosystem::RemoveDeadEntities;
      
     // Boucle principale 
     engine.Run(); 
