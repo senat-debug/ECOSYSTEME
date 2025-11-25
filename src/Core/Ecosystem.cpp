@@ -1,6 +1,11 @@
-#include "Core/Ecosystem.h" 
+#include "Core/Ecosystem.h"
 #include <algorithm> 
 #include <iostream> 
+#include <SDL3/SDL.h> // Ajout pour SDL_FRect, SDL_SetRenderDrawColor etc.
+#include <string> // Ajout pour std::to_string
+
+// Assurez-vous d'inclure les definitions de Structs.h si elles contiennent Vector2D, Food, etc.
+
 namespace Ecosystem { 
 namespace Core { 
 // 🏗 CONSTRUCTEUR 
@@ -28,10 +33,11 @@ void Ecosystem::Initialize(int initialHerbivores, int initialCarnivores, int ini
     for (int i = 0; i < initialCarnivores; ++i) { 
         SpawnRandomEntity(EntityType::CARNIVORE); 
     }
+    // Si EntityType::PLANT est une entité vivante :
     for (int i = 0; i < initialPlants; ++i) { 
         SpawnRandomEntity(EntityType::PLANT); 
     }
-    // Nourriture initiale 
+    // Nourriture initiale (sources statiques de Food)
     SpawnFood(20); 
     std::cout << "🌱Écosystème initialisé avec " << mEntities.size() << " entités"<< std::endl;
  } 
@@ -55,6 +61,7 @@ void Ecosystem::SpawnFood(int count) {
     for (int i = 0; i < count; ++i) { 
         if (mFoodSources.size() < 100) {  // Limite maximale de nourriture 
             Vector2D position = GetRandomPosition(); 
+            // La construction doit correspondre à la structure Food
             mFoodSources.emplace_back(position, 25.0f); 
         } 
     }
@@ -78,20 +85,20 @@ void Ecosystem::RemoveDeadEntities() {
 void Ecosystem::HandleReproduction() { 
     std::vector<std::unique_ptr<Entity>> newEntities; 
     for (auto& entity : mEntities) { 
-        if (entity->CanReproduce() && mEntities.size() < mMaxEntities) { 
+        // Ajout d'une condition plus précise pour le max d'entités
+        if (entity->CanReproduce() && mEntities.size() + newEntities.size() < mMaxEntities) { 
             auto baby = entity->Reproduce(); 
             if (baby) { 
                  newEntities.push_back(std::move(baby)); 
                 mStats.birthsToday++; 
-    // Ajout des nouveaux entités 
+            }
+        } 
+    } 
+    // Ajout des nouveaux entités (CORRIGÉ: Déplacé en dehors de la boucle)
     for (auto& newEntity : newEntities) { 
         mEntities.push_back(std::move(newEntity)); 
-    }
-    }
-        } 
-            } 
-               
- } 
+    } 
+} 
 // 🍽 GESTION DE L'ALIMENTATION 
 void Ecosystem::HandleEating() { 
     // Ici on implémenterait la logique de recherche de nourriture 
@@ -103,12 +110,36 @@ void Ecosystem::HandleEating() {
         } 
     }
  } 
+
+// --- MÉTHODES DE GESTION (CORRIGÉ: Ces implémentations ont été conservées et déplacées) ---
+
+void Ecosystem::AddEntity(std::unique_ptr<Entity> entity) {
+    if (mEntities.size() < mMaxEntities) {
+        // Le std::unique_ptr est transféré (move) dans le vecteur
+        mEntities.push_back(std::move(entity));
+    }
+}
+
+void Ecosystem::AddFood(Vector2D position, float energy) {
+    if (mFoodSources.size() < 100) { 
+        //Food;
+        /*newFood.position = position;*/
+        /*newFood.energy = energy;*/
+       /* newFood.color = (0, 150, 0, 255); // Assumer couleur pour le rendu*/
+        
+        mStats.totalFood++; 
+    }
+}
+
+
 // MISE À JOUR DES STATISTIQUES 
 void Ecosystem::UpdateStatistics() { 
     mStats.totalHerbivores = 0; 
     mStats.totalCarnivores = 0; 
     mStats.totalPlants = 0; 
     mStats.totalFood = mFoodSources.size(); 
+    mStats.deathsToday = 0; // Réinitialiser pour le nouveau cycle
+    mStats.birthsToday = 0; // Réinitialiser pour le nouveau cycle
     for (const auto& entity : mEntities) { 
         switch (entity->GetType()) { 
             case EntityType::HERBIVORE: 
@@ -130,6 +161,7 @@ void Ecosystem::SpawnRandomEntity(EntityType type) {
     std::string name; 
     switch (type) { 
         case EntityType::HERBIVORE: 
+            // L'implémentation de ces fonctions est incomplète mais acceptable pour l'instant
             name = "Herbivore_" + std::to_string(mStats.totalHerbivores); 
             break; 
         case EntityType::CARNIVORE: 
@@ -139,6 +171,7 @@ void Ecosystem::SpawnRandomEntity(EntityType type) {
             name = "Plant_" + std::to_string(mStats.totalPlants); 
             break; 
     }
+    // Ligne problématique: nécessite que le constructeur Entity(type, position, name) existe
     mEntities.push_back(std::make_unique<Entity>(type, position, name)); 
 } 
 // POSITION ALÉATOIRE 
