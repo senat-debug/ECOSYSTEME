@@ -94,7 +94,7 @@ void Ecosystem::HandleReproduction() {
             }
         } 
     } 
-    // Ajout des nouveaux entités (CORRIGÉ: Déplacé en dehors de la boucle)
+    // Ajout des nouveaux entités 
     for (auto& newEntity : newEntities) { 
         mEntities.push_back(std::move(newEntity)); 
     } 
@@ -111,7 +111,7 @@ void Ecosystem::HandleEating() {
     }
  } 
 
-// --- MÉTHODES DE GESTION (CORRIGÉ: Ces implémentations ont été conservées et déplacées) ---
+// --- MÉTHODES DE GESTION 
 
 void Ecosystem::AddEntity(std::unique_ptr<Entity> entity) {
     if (mEntities.size() < mMaxEntities) {
@@ -138,8 +138,8 @@ void Ecosystem::UpdateStatistics() {
     mStats.totalCarnivores = 0; 
     mStats.totalPlants = 0; 
     mStats.totalFood = mFoodSources.size(); 
-    mStats.deathsToday = 0; // Réinitialiser pour le nouveau cycle
-    mStats.birthsToday = 0; // Réinitialiser pour le nouveau cycle
+    mStats.deathsToday = 0; 
+    mStats.birthsToday = 0;
     for (const auto& entity : mEntities) { 
         switch (entity->GetType()) { 
             case EntityType::HERBIVORE: 
