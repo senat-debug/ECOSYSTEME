@@ -9,7 +9,7 @@ namespace Core {
 // ÉNUMÉRATION DES TYPES D'ENTITÉS 
 enum class EntityType { 
     HERBIVORE, 
-    CARNIVORE, 
+    CARNIVORE,
     PLANT 
 }; 
 class Entity { 

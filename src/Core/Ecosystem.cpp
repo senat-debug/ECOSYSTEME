@@ -122,10 +122,10 @@ void Ecosystem::AddEntity(std::unique_ptr<Entity> entity) {
 
 void Ecosystem::AddFood(Vector2D position, float energy) {
     if (mFoodSources.size() < 100) { 
-        //Food;
-        /*newFood.position = position;*/
-        /*newFood.energy = energy;*/
-       /* newFood.color = (0, 150, 0, 255); // Assumer couleur pour le rendu*/
+        /*Food;
+        newFood.position = position;&
+        newFood.energy = energy;
+        newFood.color = (0, 150, 0, 255); // Assumer couleur pour le rendu*/
         
         mStats.totalFood++; 
     }
@@ -133,7 +133,7 @@ void Ecosystem::AddFood(Vector2D position, float energy) {
 
 
 // MISE À JOUR DES STATISTIQUES 
-void Ecosystem::UpdateStatistics() { 
+  void Ecosystem::UpdateStatistics() { 
     mStats.totalHerbivores = 0; 
     mStats.totalCarnivores = 0; 
     mStats.totalPlants = 0; 
