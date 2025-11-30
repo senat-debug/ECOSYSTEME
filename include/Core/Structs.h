@@ -45,6 +45,13 @@ struct Food {
     // Constructeur 
     Food(Vector2D pos, float energy = 25.0f)  
         : position(pos), energyValue(energy), color(Color::Green()) {} 
+
+    struct random {
+        static float Float(float min, float max) {
+            return min + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (max - min)));
+        }
+    };
+
 }; 
 } // namespace Core 
 } // namespace Ecosystem
